@@ -1,6 +1,6 @@
 import sql from 'mssql';
 
-const sqlConfig = {
+const sqlConfig: sql.config = {
   user: process.env['DB_USER'] as string,
   password: process.env['DB_PASSWORD'] as string,
   server: process.env['DB_HOST'] as string,
@@ -17,11 +17,15 @@ const sqlConfig = {
   }
 };
 
-async function getConnection(): Promise<void> {
-  const pool = await sql.connect(sqlConfig);
-  const result = await pool.request().query('SELECT 1');
-
-  console.log(result);
+export async function getConnection(): Promise<any> {
+  try {
+    const pool: sql.ConnectionPool = await sql.connect(sqlConfig);
+    return pool;
+    // const result = await pool.request().query('SELECT 1');
+    // console.log(result);
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 getConnection()
