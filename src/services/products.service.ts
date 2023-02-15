@@ -13,7 +13,6 @@ const createProductService = async ({
   description,
   quantity
 }: IProduct): Promise<any> => {
-  console.log(name, description, quantity);
   const pool = await getConnection();
   const result = await pool
     .request()
@@ -24,4 +23,13 @@ const createProductService = async ({
   return result;
 };
 
-export { getProductsService, createProductService };
+const getProductByIdService = async (id: number): Promise<any> => {
+  const pool = await getConnection();
+  const result = await pool
+    .request()
+    .input('Id', sql.Int, id)
+    .query(queries.getProductById);
+  return result;
+};
+
+export { getProductsService, createProductService, getProductByIdService };
