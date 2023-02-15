@@ -32,4 +32,18 @@ const getProductByIdService = async (id: number): Promise<any> => {
   return result;
 };
 
-export { getProductsService, createProductService, getProductByIdService };
+const deleteProductService = async (id: number): Promise<any> => {
+  const pool = await getConnection();
+  const result = await pool
+    .request()
+    .input('Id', sql.Int, id)
+    .query(queries.deleteProductById);
+  return result;
+};
+
+export {
+  getProductsService,
+  createProductService,
+  getProductByIdService,
+  deleteProductService
+};

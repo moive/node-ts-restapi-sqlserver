@@ -1,11 +1,14 @@
 import type { Request, Response } from 'express';
 import {
   createProductService,
+  deleteProductService,
   getProductByIdService,
   getProductsService
 } from '../services/products.service';
 import { ResponseError } from '../utils/custom.error';
 import { errorFielRequired } from '../utils/required.error';
+
+const codeError = new ResponseError();
 
 const getProducts = async (_req: Request, res: Response): Promise<any> => {
   const data = await getProductsService();
@@ -39,7 +42,6 @@ const getProductById = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const codeError = new ResponseError();
   try {
     const { id } = req.params;
     const result = await getProductByIdService(Number(id));
@@ -52,4 +54,14 @@ const getProductById = async (
   }
 };
 
-export { getProducts, createProduct, getProductById };
+const deleteProductById = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { id } = req.params;
+    const result = await deleteProductService(Number(id));
+    if (result.rowsAffected <= 0) throw new ResponseError('Not found', 404);
+    return res.sendStatus(204);
+  } catch (e: any) {
+    return res.status(e.statusCode).send({ ok: false, message: e.message });
+  }
+};
+export { getProducts, createProduct, getProductById, deleteProductById };
