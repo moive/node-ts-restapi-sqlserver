@@ -8,8 +8,6 @@ import {
 import { ResponseError } from '../utils/custom.error';
 import { errorFielRequired } from '../utils/required.error';
 
-const codeError = new ResponseError();
-
 const getProducts = async (_req: Request, res: Response): Promise<any> => {
   const data = await getProductsService();
   return res.json({ recordset: data.recordset });
@@ -48,9 +46,7 @@ const getProductById = async (
     if (result.rowsAffected <= 0) throw new ResponseError('Not found', 404);
     return res.send(result.recordset[0]);
   } catch (e: any) {
-    return res
-      .status(codeError.statusCode)
-      .send({ ok: false, error: e.message });
+    return res.status(e.statusCode).send({ ok: false, error: e.message });
   }
 };
 
