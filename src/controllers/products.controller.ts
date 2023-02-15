@@ -2,6 +2,7 @@ import type { Request, Response } from 'express';
 import {
   createProductService,
   deleteProductService,
+  geTotalProductsService,
   getProductByIdService,
   getProductsService
 } from '../services/products.service';
@@ -9,8 +10,21 @@ import { ResponseError } from '../utils/custom.error';
 import { errorFielRequired } from '../utils/required.error';
 
 const getProducts = async (_req: Request, res: Response): Promise<any> => {
-  const data = await getProductsService();
-  return res.json({ recordset: data.recordset });
+  try {
+    const data = await getProductsService();
+    return res.json({ recordset: data.recordset });
+  } catch (e: any) {
+    res.status(e.statusCode).send({ ok: false, error: e.message });
+  }
+};
+
+const getTotalProducts = async (_req: Request, res: Response): Promise<any> => {
+  try {
+    const result = await geTotalProductsService();
+    return res.send({ ok: true, total: result.recordset[0][''] });
+  } catch (e: any) {
+    res.status(e.statusCode).send({ ok: false, error: e.message });
+  }
 };
 
 const createProduct = async (
@@ -32,7 +46,7 @@ const createProduct = async (
     return res.json({ ok: true, result: { name, description, quantity } });
   } catch (e: any) {
     // console.log(e);
-    return res.send({ ok: false, error: e.message });
+    return res.status(e.statusCode).send({ ok: false, error: e.message });
   }
 };
 
@@ -60,4 +74,10 @@ const deleteProductById = async (req: Request, res: Response): Promise<any> => {
     return res.status(e.statusCode).send({ ok: false, message: e.message });
   }
 };
-export { getProducts, createProduct, getProductById, deleteProductById };
+export {
+  getProducts,
+  getTotalProducts,
+  createProduct,
+  getProductById,
+  deleteProductById
+};

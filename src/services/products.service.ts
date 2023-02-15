@@ -13,6 +13,16 @@ const getProductsService = async (): Promise<any> => {
   }
 };
 
+const geTotalProductsService = async (): Promise<any> => {
+  try {
+    const pool = await getConnection();
+    const total = await pool.request().query(queries.getTotalProducts);
+    return total;
+  } catch (e: any) {
+    throw new ResponseError(e.message);
+  }
+};
+
 const createProductService = async ({
   name,
   description,
@@ -60,6 +70,7 @@ const deleteProductService = async (id: number): Promise<any> => {
 
 export {
   getProductsService,
+  geTotalProductsService,
   createProductService,
   getProductByIdService,
   deleteProductService
