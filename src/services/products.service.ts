@@ -1,10 +1,10 @@
-import { getConnection } from '../database/connection';
-import type { IProduct } from '../interfaces/products.interface';
 import sql from 'mssql';
+import { getConnection, queries } from '../database';
+import type { IProduct } from '../interfaces/products.interface';
 
 const getProductsService = async (): Promise<any> => {
   const pool = await getConnection();
-  const result = await pool.request().query('SELECT * FROM products');
+  const result = await pool.request().query(queries.allProducts);
   return result;
 };
 
@@ -20,9 +20,7 @@ const createProductService = async ({
     .input('name', sql.VarChar, name)
     .input('description', sql.Text, description)
     .input('quantity', sql.Int, quantity)
-    .query(
-      'INSERT INTO Products (name, description, quantity) VALUES (@name, @description, @quantity)'
-    );
+    .query(queries.addNewProduct);
   return result;
 };
 
