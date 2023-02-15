@@ -1,3 +1,10 @@
+CREATE DATABASE webstore;
+GO
+
+USE webstore;
+
+GO
+
 CREATE TABLE Products (
 	Id INT NOT NULL PRIMARY KEY IDENTITY(1,1),
 	Name VARCHAR(100),
