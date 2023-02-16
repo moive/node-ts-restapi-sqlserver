@@ -4,7 +4,8 @@ import {
   deleteProductById,
   getProductById,
   getProducts,
-  getTotalProducts
+  getTotalProducts,
+  updateProduct
 } from '../controllers/products.controller';
 
 const router = Router();
@@ -14,5 +15,6 @@ router.get('/count', getTotalProducts);
 router.post('/', createProduct);
 router.get('/:id', getProductById);
 router.delete('/:id', deleteProductById);
+router.put('/:id', updateProduct);
 
 export { router as productsRouter };

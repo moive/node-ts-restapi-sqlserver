@@ -68,10 +68,35 @@ const deleteProductService = async (id: number): Promise<any> => {
   }
 };
 
+const updateProductService = async ({
+  id,
+  name,
+  description,
+  quantity
+}: IProduct): Promise<any> => {
+  try {
+    const pool = await getConnection();
+    const result = await pool
+      .request()
+      .input('Id', sql.Int, id)
+      .input('Name', sql.VarChar, name)
+      .input('Description', sql.Text, description)
+      .input('Quantity', sql.Int, quantity)
+      .query(queries.updateProduct);
+
+    if (result.rowsAffected <= 0) throw new ResponseError('Not found3', 400);
+
+    return result;
+  } catch (e: any) {
+    throw new ResponseError(e.message, e.statusCode);
+  }
+};
+
 export {
   getProductsService,
   geTotalProductsService,
   createProductService,
   getProductByIdService,
-  deleteProductService
+  deleteProductService,
+  updateProductService
 };

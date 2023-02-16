@@ -19,3 +19,5 @@ VALUES ('Laptop', 'Laptop Lenovo', 10),
 ('Mouse','Mouse Microsoft',20);
 
 SELECT * FROM Products;
+
+SELECT COUNT(*) FROM Products;

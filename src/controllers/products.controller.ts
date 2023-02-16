@@ -4,7 +4,8 @@ import {
   deleteProductService,
   geTotalProductsService,
   getProductByIdService,
-  getProductsService
+  getProductsService,
+  updateProductService
 } from '../services/products.service';
 import { ResponseError } from '../utils/custom.error';
 import { errorFielRequired } from '../utils/required.error';
@@ -74,10 +75,36 @@ const deleteProductById = async (req: Request, res: Response): Promise<any> => {
     return res.status(e.statusCode).send({ ok: false, message: e.message });
   }
 };
+
+const updateProduct = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { name, description, quantity } = req.body;
+    errorFielRequired({ name });
+    errorFielRequired({ description });
+    errorFielRequired({ quantity });
+    const { id } = req.params;
+    await updateProductService({
+      id,
+      name,
+      description,
+      quantity
+    });
+
+    return res.json({ ok: true, result: { id, name, description, quantity } });
+  } catch (e: any) {
+    // console.log(e);
+    return res.status(e.statusCode).send({ ok: false, error: e.message });
+  }
+};
+
 export {
   getProducts,
   getTotalProducts,
   createProduct,
   getProductById,
-  deleteProductById
+  deleteProductById,
+  updateProduct
 };
